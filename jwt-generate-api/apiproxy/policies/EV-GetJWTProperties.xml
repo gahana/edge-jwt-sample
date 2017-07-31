@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-GetJWTProperties">
+    <DisplayName>EV-GetJWTProperties</DisplayName>
+    <JSONPayload>
+        <Variable name="claims">
+            <JSONPath>$.claims</JSONPath>
+        </Variable>
+        <Variable name="issuer">
+            <JSONPath>$.issuer</JSONPath>
+        </Variable>
+        <Variable name="audience">
+            <JSONPath>$.audience</JSONPath>
+        </Variable>
+        <Variable name="expiry">
+            <JSONPath>$.expiry</JSONPath>
+        </Variable>
+        <Variable name="jws">
+            <JSONPath>$.jws</JSONPath>
+        </Variable>
+        <Variable name="jwsKey">
+            <JSONPath>$.jwsKey</JSONPath>
+        </Variable>
+        <Variable name="jwsKeyPassword">
+            <JSONPath>$.jwsKeyPassword</JSONPath>
+        </Variable>
+        <Variable name="jwsAlgo">
+            <JSONPath>$.jwsAlgo</JSONPath>
+        </Variable>
+        <Variable name="jwe">
+            <JSONPath>$.jwe</JSONPath>
+        </Variable>
+        <Variable name="jweKeyAlgo">
+            <JSONPath>$.jweKeyAlgo</JSONPath>
+        </Variable>
+        <Variable name="jweAlgo">
+            <JSONPath>$.jweAlgo</JSONPath>
+        </Variable>
+        <Variable name="jweKey">
+            <JSONPath>$.jweKey</JSONPath>
+        </Variable>
+        <Variable name="jweKeyPassword">
+            <JSONPath>$.jweKeyPassword</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+    <VariablePrefix>jwt</VariablePrefix>
+</ExtractVariables>

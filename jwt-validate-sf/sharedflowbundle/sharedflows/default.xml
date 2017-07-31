@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+    <Step>
+        <Name>EV-BearerToken</Name>
+    </Step>
+    <Step>
+        <Name>JC-JWTValidate</Name>
+    </Step>
+</SharedFlow>

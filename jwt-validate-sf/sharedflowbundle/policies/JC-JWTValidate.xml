@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<JavaCallout async="false" continueOnError="false" enabled="true" name="JC-JWTValidate">
+    <DisplayName>JC-JWTValidate</DisplayName>
+    <Properties>
+        <Property name="jwt">{jwt.jwt}</Property>
+        <Property name="iss">{jwt.issuer}</Property>
+        <Property name="aud">{jwt.audience}</Property>
+        <Property name="jws">{jwt.jws}</Property>
+        <Property name="jws-algo">{jwt.jwsAlgo}</Property>
+        <Property name="jws-key">{jwt.jwsKey}</Property>
+        <Property name="jws-key-pass">{jwt.jwsKeyPassword}</Property>
+        <Property name="jwe">{jwt.jwe}</Property>
+        <Property name="jwe-algo">{jwt.jweAlgo}</Property>
+        <Property name="jwe-key-algo">{jwt.jweKeyAlgo}</Property>
+        <Property name="jwe-key">{jwt.jweKey}</Property>
+        <Property name="jwe-key-pass">{jwt.jweKeyPassword}</Property>
+    </Properties>
+    <ClassName>com.apigeecs.jwt.JWTValidator</ClassName>
+    <ResourceURL>java://edge-jwt-validate.jar</ResourceURL>
+</JavaCallout>

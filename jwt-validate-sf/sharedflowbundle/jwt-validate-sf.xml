@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="jwt-validate">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1500997764328</CreatedAt>
+    <CreatedBy>ssudhindra@google.com</CreatedBy>
+    <Description>Validate JWT Bearer Token</Description>
+    <DisplayName>jwt-validate-sf</DisplayName>
+    <LastModifiedAt>1500997964443</LastModifiedAt>
+    <LastModifiedBy>ssudhindra@google.com</LastModifiedBy>
+    <Policies>
+        <Policy>EV-BearerToken</Policy>
+        <Policy>JC-JWTValidate</Policy>
+    </Policies>
+    <Resources>
+        <Resource>java://edge-jwt-validate.jar</Resource>
+        <Resource>java://jose4j-0.5.7.jar</Resource>
+    </Resources>
+    <Spec></Spec>
+    <subType>SharedFlow</subType>
+    <validate>false</validate>
+    <SharedFlows>
+        <SharedFlow>default</SharedFlow>
+    </SharedFlows>
+</SharedFlowBundle>

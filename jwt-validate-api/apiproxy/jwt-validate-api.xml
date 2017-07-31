@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="4" name="jwt-validate-api">
+    <Basepaths>/v1/jwt-validate-api</Basepaths>
+    <Basepaths>/v1/jwt-validate-api</Basepaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1501045040807</CreatedAt>
+    <CreatedBy>ssudhindra@google.com</CreatedBy>
+    <Description></Description>
+    <DisplayName>jwt-validate-api</DisplayName>
+    <LastModifiedAt>1501045040807</LastModifiedAt>
+    <LastModifiedBy>ssudhindra@google.com</LastModifiedBy>
+    <Policies>
+        <Policy>AM-Claims</Policy>
+        <Policy>AM-ServerError</Policy>
+        <Policy>AM-Unauthorized</Policy>
+        <Policy>FC-JWTValidation</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>java://edge-jwt-validate.jar</Resource>
+        <Resource>java://jose4j-0.5.7.jar</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

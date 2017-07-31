@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <DefaultFaultRule name="DefaultFaultRule">
+        <Step>
+            <FaultRules/>
+            <Name>AM-ServerError</Name>
+        </Step>
+        <AlwaysEnforce>false</AlwaysEnforce>
+    </DefaultFaultRule>
+    <Description/>
+    <FaultRules>
+        <FaultRule name="InvalidJWT">
+            <Condition>(fault.name Matches "ExecutionReturnedFailure") and (JWTGenratorResult = "Failure")</Condition>
+            <Step>
+                <Condition>(JWTGenratorReason = "InvalidKey")</Condition>
+                <FaultRules/>
+                <Name>AM-InvalidKey</Name>
+            </Step>
+            <Step>
+                <Condition>(JWTGenratorReason = "ProcessingError")</Condition>
+                <FaultRules/>
+                <Name>AM-ProcessingError</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>AM-ServerError</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <Flows/>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <FaultRules/>
+                <Name>EV-GetJWTProperties</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>JC-JWTGenerate</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>AM-JWT</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/jwt-generate-api</BasePath>
+        <Properties/>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

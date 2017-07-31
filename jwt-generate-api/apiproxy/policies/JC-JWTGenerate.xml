@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<JavaCallout async="false" continueOnError="false" enabled="true" name="JC-JWTGenerate">
+    <DisplayName>JC-JWTGenerate</DisplayName>
+    <FaultRules/>
+    <Properties>
+        <Property name="aud">{jwt.audience}</Property>
+        <Property name="claims-json">{jwt.claims}</Property>
+        <Property name="jwe-algo">{jwt.jweAlgo}</Property>
+        <Property name="jws-key">{jwt.jwsKey}</Property>
+        <Property name="jws-key-pass">{jwt.jwsKeyPassword}</Property>
+        <Property name="jwe">{jwt.jwe}</Property>
+        <Property name="expiry">{jwt.expiry}</Property>
+        <Property name="jws-algo">{jwt.jwsAlgo}</Property>
+        <Property name="jwe-key">{jwt.jweKey}</Property>
+        <Property name="jwe-key-pass">{jwt.jweKeyPassword}</Property>
+        <Property name="jws">{jwt.jws}</Property>
+        <Property name="iss">{jwt.issuer}</Property>
+        <Property name="jwe-key-algo">{jwt.jweKeyAlgo}</Property>
+    </Properties>
+    <ClassName>com.apigeecs.jwt.JWTGenerator</ClassName>
+    <ResourceURL>java://edge-jwt-generate.jar</ResourceURL>
+</JavaCallout>

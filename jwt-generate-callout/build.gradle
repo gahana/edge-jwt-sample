@@ -1,0 +1,27 @@
+apply plugin: 'java'
+//apply plugin: 'checkstyle'
+//apply plugin: 'findbugs'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+	compile files('lib/expressions-1.0.0.jar')
+	compile files('lib/message-flow-1.0.0.jar')
+	compile files('lib/jose4j-0.5.7.jar')
+	compile files('lib/slf4j-api-1.7.21.jar')
+	compile files('lib/slf4j-nop-1.8.0-alpha2.jar')
+	testCompile 'org.jmockit:jmockit:1.33'
+	testCompile 'junit:junit:4.+'
+}
+
+jar {
+	archiveName 'edge-jwt-generate.jar'
+}
+
+
+sourceSets.main.java.srcDirs = ['src']
+
+sourceSets.test.java.srcDirs = ['test']
+
