@@ -9,7 +9,7 @@ This is a sample [Apigee Edge](https://apigee.com/api-management) API proxy to g
 - Install [grunt](https://gruntjs.com/), [cucumber](https://github.com/cucumber/cucumber-js) and [apickli](https://github.com/apickli/apickli) to run BDD tests
 
 ## Install
-`git clone <>` or download this repository.
+`git clone https://github.com/gahana/edge-jwt-sample.git` or download this repository.
 
 Set your Apigee Edge username and password in environment variables
 
