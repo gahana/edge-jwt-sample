@@ -46,13 +46,14 @@ module.exports = function() {
 
     // cleanup before every scenario
     this.Before(function(scenario, callback) {
-        this.apickli = new apickli.Apickli('https', 'demo24-test.apigee.net');
+    	// TODO Update your org and env
+        this.apickli = new apickli.Apickli('https', 'org-env.apigee.net');
         init(this.apickli);
         callback();
     });
 
 	this.When(/^I reset context$/, function(callback) {
-		this.apickli = new apickli.Apickli('https', 'demo24-test.apigee.net');
+		this.apickli = new apickli.Apickli('https', 'org-env.apigee.net');
 		init(this.apickli);
 		callback();
 	});
