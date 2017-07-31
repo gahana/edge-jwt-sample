@@ -32,6 +32,6 @@ $ npm install
 Run tests using below command.
 
 ```
-$ grunt tests
+$ grunt
 ```
 
