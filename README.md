@@ -57,7 +57,7 @@ $ cd jwt-validate-callout
 $ gradle test
 ```
 
-To run BDD tests, first update org and env name in `Before` function of file `edge-jwt-sample/test/features/step_definitions/jwt-steps.js`. Then
+To run BDD tests, first update org and env name in URL variable of file `edge-jwt-sample/test/features/step_definitions/jwt-steps.js`. Then
 
 ```
 $ cd test

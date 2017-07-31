@@ -1,8 +1,8 @@
 #!/bin/bash
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 USAGE="Usage: deploy [all|generate|validate] [all|java|proxy|sharedflow]"
-ORG="org name"
-ENV="env name"
+ORG="org"
+ENV="env"
 
 if [ -z "$1" ]; then
 	echo $USAGE

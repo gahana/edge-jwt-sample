@@ -1,5 +1,5 @@
-# Test project for hello
-This is a test project for hello. This test project has automated test scripts based on cucumber in BDD style. The project uses [apickli](https://github.com/apickli/apickli) a REST API integration testing framework.
+# Test project for edge-jwt-sample
+This test project has automated test scripts based on cucumber in BDD style. The project uses [apickli](https://github.com/apickli/apickli) a REST API integration testing framework.
 
 ## Setup
 

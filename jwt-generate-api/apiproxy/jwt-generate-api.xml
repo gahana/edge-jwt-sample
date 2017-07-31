@@ -21,7 +21,6 @@
     <Resources>
         <Resource>java://edge-jwt-generate.jar</Resource>
         <Resource>java://jose4j-0.5.7.jar</Resource>
-        <Resource>jsc://JavaScript-1.js</Resource>
     </Resources>
     <Spec></Spec>
     <TargetServers/>

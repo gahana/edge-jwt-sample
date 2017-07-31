@@ -3,6 +3,8 @@
 
 var apickli = require('apickli');
 
+var URL = 'org-env.apigee.net';
+
 var CLAIMS = '{\\"sub\\":\\"John Doe\\",\\"email\\":\\"johndoe@gmail.com\\"}';
 var JWS_HS_KEY = "lr7LQmTSqre2vHaz70SfuhRnqRDRIGTjFuj9xudU77fubQ9pRJSUTwpEhLmYpGRkp4sXX+Gjq7L1M/ZKJWhBLw==";
 var JWE_AES128_KEY = "htO6nEdF6ZHHsKm0jplfDA==";
@@ -47,13 +49,13 @@ module.exports = function() {
     // cleanup before every scenario
     this.Before(function(scenario, callback) {
     	// TODO Update your org and env
-        this.apickli = new apickli.Apickli('https', 'org-env.apigee.net');
+        this.apickli = new apickli.Apickli('https', URL);
         init(this.apickli);
         callback();
     });
 
 	this.When(/^I reset context$/, function(callback) {
-		this.apickli = new apickli.Apickli('https', 'org-env.apigee.net');
+		this.apickli = new apickli.Apickli('https', URL);
 		init(this.apickli);
 		callback();
 	});
