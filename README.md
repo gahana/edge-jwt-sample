@@ -7,6 +7,7 @@ This is a sample [Apigee Edge](https://apigee.com/api-management) API proxy to g
 - Install [NodeJS](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/).
 - Install [apigeetool](https://github.com/apigee/apigeetool-node) to package and deploy API proxy.
 - Install [grunt](https://gruntjs.com/), [cucumber](https://github.com/cucumber/cucumber-js) and [apickli](https://github.com/apickli/apickli) to run BDD tests
+- If you plan to use algorithms with large key sizes like AES256, you need to install [Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html)
 
 ## Install
 `git clone https://github.com/gahana/edge-jwt-sample.git` or download this repository.
@@ -65,6 +66,63 @@ $ grunt
 ```
 
 ## Usage
+### Java Callout properties 
+Java Callout Property tag's name attribute and it value are summarized below.
+|   Property   |           Presence          |                                                                         Description                                                                          |
+| ------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| jws          | Optional                    | Value can be either true or false. Default is false. Atleast one of jws or jwe should be set to true.                                                        |
+| jws-algo     | Required, if jws is true    | See table below for supported signing algorithm values.                                                                                                      |
+| jws-key      | Required, if jws is true    | Key used to sign JWTs, can be HMAC or RSA public/private key.                                                                                                |
+| jws-key-pass | Optional                    | Password used to decrypt RSA private key.                                                                                                                    |
+| jwe          | Optional                    | Value can be either true or false. Default is false. Atleast one of jws or jwe should be set to true.                                                        |
+| jwe-algo     | Required, if jwe is true    | See table below for supported encryption algorithm values.                                                                                                   |
+| jwe-key-algo | Required, if jwe is true    | See table below for supported encryption key management algorithm values.                                                                                    |
+| jwe-key      | Required, if jwe is true    | Key used to sign JWTs, can be AES or RSA public/private key.                                                                                                 |
+| jwe-key-pass | Optional                    | Password used to decrypt RSA private key.                                                                                                                    |
+| claims-json  | Required                    | Claims in the JSON string format. Property "sub" is mandatory and any other claims are optional.                                                             |
+| iss          | Required                    | When generating a JWT, this is the issuer property that will go in claims. When validating a JWT, the value to compare and error out if it does not match.   |
+| aud          | Required                    | When generating a JWT, this is the audience property that will go in claims. When validating a JWT, the value to compare and error out if it does not match. |
+| expiry       | Required, if generating JWT | Expiry time for JWT in minutes when generating it. Not needed while validating JWT.                                                                          |
+| jwt          | Required, if validating JWT | JWT to validate. Not needed for JWT generation.                                                                                                              |
+
+### Supported algorithms
+This sample implementation covers some of the algorithms([JWA](https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40)) for signing([JWS](https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41)) and/or encrypting([JWE](https://tools.ietf.org/html/draft-ietf-jose-json-web-encryption-40)) JWTs.
+
+The values for jws-algo property and supported signing algorithms are summarized below.
+|     jws-algo     |          Description           |
+| ---------------- | ------------------------------ |
+| HMAC_SHA256      | HMAC using SHA-256             |
+| HMAC_SHA384      | HMAC using SHA-384             |
+| HMAC_SHA512      | HMAC using SHA-512             |
+| RSA_USING_SHA256 | RSASSA-PKCS-v1_5 using SHA-256 |
+| RSA_USING_SHA384 | RSASSA-PKCS-v1_5 using SHA-384 |
+| RSA_USING_SHA512 | RSASSA-PKCS-v1_5 using SHA-512 |
+
+The values for jws-key-algo property and supported key management algorithms are summarized below.
+| jws-key-algo |                        Description                        |
+| ------------ | --------------------------------------------------------- |
+| A128KW       | AES Key Wrap with default initial value using 128 bit key |
+| A192KW       | AES Key Wrap with default initial value using 192 bit key |
+| A256KW       | AES Key Wrap with default initial value using 256 bit key |
+| A128GCMKW    | Key wrapping with AES GCM using 128 bit key               |
+| A192GCMKW    | Key wrapping with AES GCM using 192 bit key               |
+| A256GCMKW    | Key wrapping with AES GCM using 256 bit key               |
+| RSA_OAEP     | RSAES OAEP using default parameters                       |
+| RSA1_5       | RSAES-PKCS1-V1_5                                          |
+
+The values for jws-key-algo property and supported key management algorithms are summarized below.
+|         jws-algo         |                         Description                         |
+| ------------------------ | ----------------------------------------------------------- |
+| AES_128_CBC_HMAC_SHA_256 | AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm |
+| AES_192_CBC_HMAC_SHA_384 | AES_192_CBC_HMAC_SHA_384 authenticated encryption algorithm |
+| AES_256_CBC_HMAC_SHA_512 | AES_256_CBC_HMAC_SHA_512 authenticated encryption algorithm |
+| AES_128_GCM              | AES GCM using 128 bit key                                   |
+| AES_192_GCM              | AES GCM using 192 bit key                                   |
+| AES_256_GCM              | AES GCM using 256 bit key                                   |
+
+Other algorithms as per JWS and JWE are not implemented in this sample project. However it should be easy to extend this implementation to cover those algorithms as well. JSON Web Keys(JWKs) are not currently supported with this implementation.
+
+## Examples
 
 ### Signed JWTs
 A sample Java Callout policy to generate signed JWTs with `HMAC_SHA512` algorithm. The properties issuer `iss`, audience `aud` and expiry in minutes `expiry` are added to claims in the `claims-json` property. `claims-json` must have `sub` property at the minimum and be in JSON string format. The `jws` property must be set to true, otherwise the JWTs will not be signed.
@@ -269,32 +327,5 @@ $ openssl pkcs8 -in privatekey.pem -topk8 -nocrypt -out privatekey-pkcs8.pem
 
 Note: Above command uses `nocrypt` option. While this is fine for development purpose, it is recommended to use encryption for products keys.
 
-## Supported algorithms
-This sample implementation covers some of the algorithms([JWA](https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40)) for signing([JWS](https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41)) and/or encrypting([JWE](https://tools.ietf.org/html/draft-ietf-jose-json-web-encryption-40)) JWTs.
-- Signing (digtial signature or MAC algorithm)
-	+ HMAC using SHA-256
-	+ HMAC using SHA-384
-	+ HMAC using SHA-512
-	+ RSASSA-PKCS-v1_5 using SHA-256
-	+ RSASSA-PKCS-v1_5 using SHA-384
-	+ RSASSA-PKCS-v1_5 using SHA-512
-- Encryption
-	+ Key management algorithms
-		- RSA1_5 (RSAES-PKCS1-V1_5)
-		- RSA-OAEP (RSAES OAEP using default parameters)
-		- A128KW (AES Key Wrap with default initial value using 128 bit key)
-		- A192KW (AES Key Wrap with default initial value using 192 bit key)
-		- A256KW (AES Key Wrap with default initial value using 256 bit key)
-		- A128GCMKW (Key wrapping with AES GCM using 128 bit key)
-		- A192GCMKW (Key wrapping with AES GCM using 192 bit key)
-		- A256GCMKW (Key wrapping with AES GCM using 256 bit key)
-	+ Encryption algorithm
-		- A128CBC-HS256 (AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm)
-		- A192CBC-HS384 (AES_192_CBC_HMAC_SHA_384 authenticated encryption algorithm)
-		- A256CBC-HS512 (AES_256_CBC_HMAC_SHA_512 authenticated encryption algorithm)
-		- A128GCM (AES GCM using 128 bit key)
-		- A192GCM (AES GCM using 192 bit key)
-		- A256GCM (AES GCM using 256 bit key)
-
-Other algorithms as per JWS and JWE are not implemented in this sample project. However it should be easy to extend this implementation to cover those algorithms as well. JSON Web Keys(JWKs) are not currently supported with this implementation.
-
+## Attribution
+The initial part of this project started from this [earlier](https://github.com/apigee/iloveapis2015-jwt-jwe-jws) JWT implementation for edge.
