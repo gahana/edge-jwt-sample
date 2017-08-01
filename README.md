@@ -124,7 +124,7 @@ The values for jws-key-algo property and supported key management algorithms are
 | AES_192_GCM              | AES GCM using 192 bit key                                   |
 | AES_256_GCM              | AES GCM using 256 bit key                                   |
 
-Other algorithms as per JWS and JWE are not implemented in this sample project. However it should be easy to extend this implementation to cover those algorithms as well. JSON Web Keys(JWKs) are not currently supported with this implementation.
+Other algorithms as per JWS and JWE are not implemented in this sample project. However it should be easy to extend this implementation to cover those algorithms as well. [JSON Web Keys](https://tools.ietf.org/html/draft-ietf-jose-json-web-key-41) is currently not supported with this implementation.
 
 ## Examples
 
