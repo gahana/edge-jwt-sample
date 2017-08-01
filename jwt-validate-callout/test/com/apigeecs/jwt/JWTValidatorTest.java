@@ -370,40 +370,6 @@ public class JWTValidatorTest {
 	}
 
 	@Test
-	public void testJWEWithRSAAESAESKey3() {
-		String claimsJSON = sampleClaims();
-		KeyPair rsaKeyPair = getRSAKeyPair();
-		String jwt = jweEncrypt(claimsJSON, false, rsaKeyPair.getPublic(), "RSA1_5", "AES_256_CBC_HMAC_SHA_512");
-		String pemPrivateKey = getPEMPrivateKeyFromDER(rsaKeyPair.getPrivate());
-
-		JWTValidator validator = 
-			jweValidator(
-				pemPrivateKey, "RSA1_5", "AES_256_CBC_HMAC_SHA_512", 
-				jwt, "edge-jwt-gen", "aud-1", "300");
-		ExecutionResult result = validator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		varifyClaims(this.mctx.getVariable(CLAIMS));
-	}
-
-	@Test
-	public void testJWEWithRSAAESKey4() {
-		String claimsJSON = sampleClaims();
-		KeyPair rsaKeyPair = getRSAKeyPair();
-		String jwt = jweEncrypt(claimsJSON, false, rsaKeyPair.getPublic(), "RSA1_5", "AES_256_GCM");
-		String pemPrivateKey = getPEMPrivateKeyFromDER(rsaKeyPair.getPrivate());
-
-		JWTValidator validator = 
-			jweValidator(
-				pemPrivateKey, "RSA1_5", "AES_256_GCM", 
-				jwt, "edge-jwt-gen", "aud-1", "300");
-		ExecutionResult result = validator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		varifyClaims(this.mctx.getVariable(CLAIMS));
-	}
-
-	@Test
 	public void testJWEAndJWSWithRSAAndRSA() {
 		String claimsJSON = sampleClaims();
 		KeyPair rsaKeyPairSign = getRSAKeyPair();
@@ -439,31 +405,6 @@ public class JWTValidatorTest {
 			validatorJWSAndJWE(
 				keyToString(keySign), "HMAC_SHA256",
 				pemPrivateKeyEnc, "RSA_OAEP", "AES_128_GCM", 
-				jwt, "edge-jwt-gen", "aud-1", "300");
-		ExecutionResult result = validator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		varifyClaims(this.mctx.getVariable(CLAIMS));
-	}
-
-	@Test
-	public void testJWEAndJWSWithRSAAndHMAC2() {
-		String claimsJSON = sampleClaims();
-		SecretKey keySign = getHmacSHA512Key();
-		KeyPair rsaKeyPairEnc = getRSAKeyPair();
-		String pemPrivateKeyEnc = getPEMPrivateKeyFromDER(rsaKeyPairEnc.getPrivate());
-
-		System.out.println("HMAC Key: " + keyToString(keySign));
-		System.out.println("Enc Public Key: " + getPEMPublicKeyFromDER(rsaKeyPairEnc.getPublic()));
-		System.out.println("Enc Private Key: " + pemPrivateKeyEnc);
-		
-		String innerJWT = jwsSign(claimsJSON, keySign, "HMAC_SHA512");
-		String jwt = jweEncrypt(innerJWT, true, rsaKeyPairEnc.getPublic(), "RSA_OAEP", "AES_256_CBC_HMAC_SHA_512");
-
-		JWTValidator validator = 
-			validatorJWSAndJWE(
-				keyToString(keySign), "HMAC_SHA512",
-				pemPrivateKeyEnc, "RSA_OAEP", "AES_256_CBC_HMAC_SHA_512", 
 				jwt, "edge-jwt-gen", "aud-1", "300");
 		ExecutionResult result = validator.execute(this.mctx, this.ectx);
 
@@ -523,6 +464,73 @@ public class JWTValidatorTest {
 
 		verifyFailureResult(result);
 	}
+
+	// ------------- BEGIN SPECIAL TESTS -------------
+	
+	// BELOW TESTS INVOLVE AES256 AND BECAUSE OF THE LARGE KEY SIZE MAKE SURE YOU HAVE INSTALLED THE 
+	// JAVA CRYPTOGRAPHY EXTENSION (JCE) UNLIMITED STRENGTH JURISDICTION POLICY FILES
+	// HTTP://WWW.ORACLE.COM/TECHNETWORK/JAVA/JAVASE/DOWNLOADS/JCE-7-DOWNLOAD-432124.HTML
+
+	// @Test
+	// public void testJWEWithRSAAESAESKey3() {
+	// 	String claimsJSON = sampleClaims();
+	// 	KeyPair rsaKeyPair = getRSAKeyPair();
+	// 	String jwt = jweEncrypt(claimsJSON, false, rsaKeyPair.getPublic(), "RSA1_5", "AES_256_CBC_HMAC_SHA_512");
+	// 	String pemPrivateKey = getPEMPrivateKeyFromDER(rsaKeyPair.getPrivate());
+
+	// 	JWTValidator validator = 
+	// 		jweValidator(
+	// 			pemPrivateKey, "RSA1_5", "AES_256_CBC_HMAC_SHA_512", 
+	// 			jwt, "edge-jwt-gen", "aud-1", "300");
+	// 	ExecutionResult result = validator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	varifyClaims(this.mctx.getVariable(CLAIMS));
+	// }
+
+	// @Test
+	// public void testJWEWithRSAAESKey4() {
+	// 	String claimsJSON = sampleClaims();
+	// 	KeyPair rsaKeyPair = getRSAKeyPair();
+	// 	String jwt = jweEncrypt(claimsJSON, false, rsaKeyPair.getPublic(), "RSA1_5", "AES_256_GCM");
+	// 	String pemPrivateKey = getPEMPrivateKeyFromDER(rsaKeyPair.getPrivate());
+
+	// 	JWTValidator validator = 
+	// 		jweValidator(
+	// 			pemPrivateKey, "RSA1_5", "AES_256_GCM", 
+	// 			jwt, "edge-jwt-gen", "aud-1", "300");
+	// 	ExecutionResult result = validator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	varifyClaims(this.mctx.getVariable(CLAIMS));
+	// }
+
+	// @Test
+	// public void testJWEAndJWSWithRSAAndHMAC2() {
+	// 	String claimsJSON = sampleClaims();
+	// 	SecretKey keySign = getHmacSHA512Key();
+	// 	KeyPair rsaKeyPairEnc = getRSAKeyPair();
+	// 	String pemPrivateKeyEnc = getPEMPrivateKeyFromDER(rsaKeyPairEnc.getPrivate());
+
+	// 	System.out.println("HMAC Key: " + keyToString(keySign));
+	// 	System.out.println("Enc Public Key: " + getPEMPublicKeyFromDER(rsaKeyPairEnc.getPublic()));
+	// 	System.out.println("Enc Private Key: " + pemPrivateKeyEnc);
+		
+	// 	String innerJWT = jwsSign(claimsJSON, keySign, "HMAC_SHA512");
+	// 	String jwt = jweEncrypt(innerJWT, true, rsaKeyPairEnc.getPublic(), "RSA_OAEP", "AES_256_CBC_HMAC_SHA_512");
+
+	// 	JWTValidator validator = 
+	// 		validatorJWSAndJWE(
+	// 			keyToString(keySign), "HMAC_SHA512",
+	// 			pemPrivateKeyEnc, "RSA_OAEP", "AES_256_CBC_HMAC_SHA_512", 
+	// 			jwt, "edge-jwt-gen", "aud-1", "300");
+	// 	ExecutionResult result = validator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	varifyClaims(this.mctx.getVariable(CLAIMS));
+	// }
+
+	// ------------- END SPECIAL TESTS -------------
 
 	private MessageContext mockMessageContext() {
 		return new MockUp<MessageContext>() {

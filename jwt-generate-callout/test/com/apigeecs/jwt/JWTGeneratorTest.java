@@ -271,62 +271,6 @@ public class JWTGeneratorTest {
 	}
 
 	@Test
-	public void testJWEWithRSAAESAESKey3() {
-		KeyPair rsaKeyPair = getRSAKeyPair();
-		String pemPublicKey = getPEMPublicKeyFromDER(rsaKeyPair.getPublic());
-		JWTGenerator generator = jweGenerator(pemPublicKey, "RSA1_5", "AES_256_CBC_HMAC_SHA_512");
-
-		ExecutionResult result = generator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		verifyJWE(rsaKeyPair.getPrivate(), "RSA1_5", "AES_256_CBC_HMAC_SHA_512", this.mctx.getVariable(JWT));
-	}
-
-	@Test
-	public void testJWEWithRSAAESKey4() {
-		KeyPair rsaKeyPair = getRSAKeyPair();
-		String pemPublicKey = getPEMPublicKeyFromDER(rsaKeyPair.getPublic());
-		JWTGenerator generator = jweGenerator(pemPublicKey, "RSA1_5", "AES_256_GCM");
-
-		ExecutionResult result = generator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		verifyJWE(rsaKeyPair.getPrivate(), "RSA1_5", "AES_256_GCM", this.mctx.getVariable(JWT));
-	}
-
-	@Test
-	public void testJWEAndJWSWithRSAAndRSA() {
-		KeyPair rsaKeyPairSign = getRSAKeyPair();
-		String pemPrivateKeySign = getPEMPrivateKeyFromDER(rsaKeyPairSign.getPrivate());
-
-		KeyPair rsaKeyPairEnc = getRSAKeyPair();
-		String pemPublicKeyEnc = getPEMPublicKeyFromDER(rsaKeyPairEnc.getPublic());
-
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put(PROPERTY_CLAIMS_JSON, SAMPLE_CLAIMS);
-		properties.put(PROPERTY_ISSUER, "edge-jwt-gen");
-		properties.put(PROPERTY_AUDIENCE, "aud-1");
-		properties.put(PROPERTY_EXPIRY, "300");
-
-		properties.put(PROPERTY_JWS, "true");
-		properties.put(PROPERTY_JWS_KEY, pemPrivateKeySign);
-		properties.put(PROPERTY_JWS_ALGO, "RSA_USING_SHA512");
-		properties.put(PROPERTY_JWE, "true");
-		properties.put(PROPERTY_JWE_KEY, pemPublicKeyEnc);
-		properties.put(PROPERTY_JWE_KEY_ALGO, "RSA1_5");
-		properties.put(PROPERTY_JWE_ALGO, "AES_256_GCM");
-		
-		JWTGenerator generator = new JWTGenerator(properties);
-		ExecutionResult result = generator.execute(this.mctx, this.ectx);
-
-		verifySuccessResult(result);
-		verifyJWEWithJWS(
-			rsaKeyPairEnc.getPrivate(), "RSA1_5", "AES_256_GCM",
-			rsaKeyPairSign.getPublic(), "RSA_USING_SHA512",
-			this.mctx.getVariable(JWT));
-	}
-
-	@Test
 	public void testJWEAndJWSWithRSAAndHMAC() {
 		SecretKey keySign = getHmacSHA512Key();
 		KeyPair rsaKeyPairEnc = getRSAKeyPair();
@@ -398,6 +342,69 @@ public class JWTGeneratorTest {
 		verifyJWE(getDERPrivateKeyFromPEM(pemPrivateKey, "123"), "RSA_OAEP", "AES_128_CBC_HMAC_SHA_256", this.mctx.getVariable(JWT));
 	}
 
+	// ------------- BEGIN SPECIAL TESTS -------------
+	
+	// BELOW TESTS INVOLVE AES256 AND BECAUSE OF THE LARGE KEY SIZE MAKE SURE YOU HAVE INSTALLED THE 
+	// JAVA CRYPTOGRAPHY EXTENSION (JCE) UNLIMITED STRENGTH JURISDICTION POLICY FILES
+	// HTTP://WWW.ORACLE.COM/TECHNETWORK/JAVA/JAVASE/DOWNLOADS/JCE-7-DOWNLOAD-432124.HTML
+	
+	// @Test
+	// public void testJWEWithRSAAESAESKey3() {
+	// 	KeyPair rsaKeyPair = getRSAKeyPair();
+	// 	String pemPublicKey = getPEMPublicKeyFromDER(rsaKeyPair.getPublic());
+	// 	JWTGenerator generator = jweGenerator(pemPublicKey, "RSA1_5", "AES_256_CBC_HMAC_SHA_512");
+
+	// 	ExecutionResult result = generator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	verifyJWE(rsaKeyPair.getPrivate(), "RSA1_5", "AES_256_CBC_HMAC_SHA_512", this.mctx.getVariable(JWT));
+	// }
+
+	// @Test
+	// public void testJWEWithRSAAESKey4() {
+	// 	KeyPair rsaKeyPair = getRSAKeyPair();
+	// 	String pemPublicKey = getPEMPublicKeyFromDER(rsaKeyPair.getPublic());
+	// 	JWTGenerator generator = jweGenerator(pemPublicKey, "RSA1_5", "AES_256_GCM");
+
+	// 	ExecutionResult result = generator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	verifyJWE(rsaKeyPair.getPrivate(), "RSA1_5", "AES_256_GCM", this.mctx.getVariable(JWT));
+	// }
+
+	// @Test
+	// public void testJWEAndJWSWithRSAAndRSA() {
+	// 	KeyPair rsaKeyPairSign = getRSAKeyPair();
+	// 	String pemPrivateKeySign = getPEMPrivateKeyFromDER(rsaKeyPairSign.getPrivate());
+
+	// 	KeyPair rsaKeyPairEnc = getRSAKeyPair();
+	// 	String pemPublicKeyEnc = getPEMPublicKeyFromDER(rsaKeyPairEnc.getPublic());
+
+	// 	Map<String, String> properties = new HashMap<String, String>();
+	// 	properties.put(PROPERTY_CLAIMS_JSON, SAMPLE_CLAIMS);
+	// 	properties.put(PROPERTY_ISSUER, "edge-jwt-gen");
+	// 	properties.put(PROPERTY_AUDIENCE, "aud-1");
+	// 	properties.put(PROPERTY_EXPIRY, "300");
+
+	// 	properties.put(PROPERTY_JWS, "true");
+	// 	properties.put(PROPERTY_JWS_KEY, pemPrivateKeySign);
+	// 	properties.put(PROPERTY_JWS_ALGO, "RSA_USING_SHA512");
+	// 	properties.put(PROPERTY_JWE, "true");
+	// 	properties.put(PROPERTY_JWE_KEY, pemPublicKeyEnc);
+	// 	properties.put(PROPERTY_JWE_KEY_ALGO, "RSA1_5");
+	// 	properties.put(PROPERTY_JWE_ALGO, "AES_256_GCM");
+		
+	// 	JWTGenerator generator = new JWTGenerator(properties);
+	// 	ExecutionResult result = generator.execute(this.mctx, this.ectx);
+
+	// 	verifySuccessResult(result);
+	// 	verifyJWEWithJWS(
+	// 		rsaKeyPairEnc.getPrivate(), "RSA1_5", "AES_256_GCM",
+	// 		rsaKeyPairSign.getPublic(), "RSA_USING_SHA512",
+	// 		this.mctx.getVariable(JWT));
+	// }
+
+	// ------------- END SPECIAL TESTS -------------
 
 	private MessageContext mockMessageContext() {
 		return new MockUp<MessageContext>() {
