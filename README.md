@@ -15,8 +15,8 @@ This is a sample [Apigee Edge](https://apigee.com/api-management) API proxy to g
 Set your Apigee Edge username and password in environment variables
 
 ```
-$ set EDGE_USERNAME=<Apigee Edge Username>
-$ set EDGE_PASSWORD=<Apigee Edge Password>
+$ export EDGE_USERNAME=<Apigee Edge Username>
+$ export EDGE_PASSWORD=<Apigee Edge Password>
 ```
 
 Update Edge organization and environment in `deploy.sh` file
