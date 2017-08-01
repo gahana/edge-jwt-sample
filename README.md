@@ -68,6 +68,7 @@ $ grunt
 ## Usage
 ### Java Callout properties 
 Java Callout Property tag's name attribute and it value are summarized below.
+
 |   Property   |           Presence          |                                                                         Description                                                                          |
 | ------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | jws          | Optional                    | Value can be either true or false. Default is false. Atleast one of jws or jwe should be set to true.                                                        |
@@ -89,6 +90,7 @@ Java Callout Property tag's name attribute and it value are summarized below.
 This sample implementation covers some of the algorithms([JWA](https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40)) for signing([JWS](https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41)) and/or encrypting([JWE](https://tools.ietf.org/html/draft-ietf-jose-json-web-encryption-40)) JWTs.
 
 The values for jws-algo property and supported signing algorithms are summarized below.
+
 |     jws-algo     |          Description           |
 | ---------------- | ------------------------------ |
 | HMAC_SHA256      | HMAC using SHA-256             |
@@ -99,6 +101,7 @@ The values for jws-algo property and supported signing algorithms are summarized
 | RSA_USING_SHA512 | RSASSA-PKCS-v1_5 using SHA-512 |
 
 The values for jws-key-algo property and supported key management algorithms are summarized below.
+
 | jws-key-algo |                        Description                        |
 | ------------ | --------------------------------------------------------- |
 | A128KW       | AES Key Wrap with default initial value using 128 bit key |
@@ -111,6 +114,7 @@ The values for jws-key-algo property and supported key management algorithms are
 | RSA1_5       | RSAES-PKCS1-V1_5                                          |
 
 The values for jws-key-algo property and supported key management algorithms are summarized below.
+
 |         jws-algo         |                         Description                         |
 | ------------------------ | ----------------------------------------------------------- |
 | AES_128_CBC_HMAC_SHA_256 | AES_128_CBC_HMAC_SHA_256 authenticated encryption algorithm |
