@@ -6,20 +6,6 @@ This test project has automated test scripts based on cucumber in BDD style. The
 ### Node JS
 [Download](https://nodejs.org/en/download/) and install NodeJS. NPM should be installed as part of it.
 
-### Grunt
-Install Grunt, a build tool.
-
-```
-$ npm install -g grunt-cli
-```
-
-### Cucumber
-Install CucumberJS for BDD style and Gerkhin language support.
-
-```
-$ npm install -g cucumber
-```
-
 ## Dependencies
 Get dependencies in package.json by npm install.
 
@@ -29,9 +15,25 @@ $ npm install
 ```
 
 ## Run
-Run tests using below command.
+To run BDD tests, first update org and env name in URL variable of file `edge-jwt-sample/test/features/support/init.js`. Then
 
+```bash
+$ ./node_modules/.bin/cucumberjs
 ```
-$ grunt
+
+Specify the feature file to run
+
+```bash
+$ ./node_modules/.bin/cucumberjs features/jws.feature
 ```
+
+Specify the output format
+
+```bash
+$ ./node_modules/.bin/cucumberjs --format json
+$ ./node_modules/.bin/cucumberjs --format summary
+$ ./node_modules/.bin/cucumberjs --format progress
+```
+
+See [cucumber-js docs](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md) for more options.
 

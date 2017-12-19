@@ -1,8 +1,9 @@
-/* jslint node: true */
 'use strict';
 
-var apickli = require('apickli');
+const apickli = require('apickli');
+const {defineSupportCode} = require('cucumber');
 
+// Update the Apigee Org and Env in the URL variable
 var URL = 'org-env.apigee.net';
 
 var CLAIMS = '{\\"sub\\":\\"John Doe\\",\\"email\\":\\"johndoe@gmail.com\\"}';
@@ -30,64 +31,74 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxoE/tMVvp1JqQ/1eGATl1aq+ciUXrGJ8yekF
 -----END PUBLIC KEY-----";
 var RSA_PRIVATE_KEY_PASS = "123";
 
-module.exports = function() {
-	function init(apickli) {
-	    apickli.storeValueInScenarioScope("CLAIMS", CLAIMS);
-	    apickli.storeValueInScenarioScope("JWS_HS_KEY", JWS_HS_KEY);
-	    apickli.storeValueInScenarioScope("JWE_AES128_KEY", JWE_AES128_KEY);
-	    apickli.storeValueInScenarioScope("JWE_AES192_KEY", JWE_AES192_KEY);
-	    apickli.storeValueInScenarioScope("JWE_AES256_KEY", JWE_AES256_KEY);
-	    apickli.storeValueInScenarioScope("JWS_RSA_PUBLIC_KEY", JWS_RSA_PUBLIC_KEY);
-	    apickli.storeValueInScenarioScope("JWS_RSA_PRIVATE_KEY", JWS_RSA_PRIVATE_KEY);
-	    apickli.storeValueInScenarioScope("JWE_RSA_PUBLIC_KEY", JWE_RSA_PUBLIC_KEY);
-	    apickli.storeValueInScenarioScope("JWE_RSA_PRIVATE_KEY", JWE_RSA_PRIVATE_KEY);
-	    apickli.storeValueInScenarioScope("RSA_PRIVATE_KEY_ENC", RSA_PRIVATE_KEY_ENC);
-	    apickli.storeValueInScenarioScope("RSA_PRIVATE_KEY_PASS", RSA_PRIVATE_KEY_PASS);
-	    apickli.storeValueInScenarioScope("RSA_PUBLIC_KEY", RSA_PUBLIC_KEY);
-	}
+function init(apickli) {
+    apickli.storeValueInScenarioScope("CLAIMS", CLAIMS);
+    apickli.storeValueInScenarioScope("JWS_HS_KEY", JWS_HS_KEY);
+    apickli.storeValueInScenarioScope("JWE_AES128_KEY", JWE_AES128_KEY);
+    apickli.storeValueInScenarioScope("JWE_AES192_KEY", JWE_AES192_KEY);
+    apickli.storeValueInScenarioScope("JWE_AES256_KEY", JWE_AES256_KEY);
+    apickli.storeValueInScenarioScope("JWS_RSA_PUBLIC_KEY", JWS_RSA_PUBLIC_KEY);
+    apickli.storeValueInScenarioScope("JWS_RSA_PRIVATE_KEY", JWS_RSA_PRIVATE_KEY);
+    apickli.storeValueInScenarioScope("JWE_RSA_PUBLIC_KEY", JWE_RSA_PUBLIC_KEY);
+    apickli.storeValueInScenarioScope("JWE_RSA_PRIVATE_KEY", JWE_RSA_PRIVATE_KEY);
+    apickli.storeValueInScenarioScope("RSA_PRIVATE_KEY_ENC", RSA_PRIVATE_KEY_ENC);
+    apickli.storeValueInScenarioScope("RSA_PRIVATE_KEY_PASS", RSA_PRIVATE_KEY_PASS);
+    apickli.storeValueInScenarioScope("RSA_PUBLIC_KEY", RSA_PUBLIC_KEY);
+}
 
-    // cleanup before every scenario
-    this.Before(function(scenario, callback) {
-    	// TODO Update your org and env
+function asJSON(cells) {
+    var obj = cells.hashes().reduce(function(obj, aCell) {
+        obj[aCell.name] = aCell.value;
+        return obj
+    }, {});
+    return JSON.stringify(obj);
+}
+
+defineSupportCode(function({Before, Given, When, Then}) {
+    Before(function() {
+        this.apickli = new apickli.Apickli('https', "demo24-test.apigee.net");
+        init(this.apickli);
+    });
+
+    When(/^I reset context$/, function(callback) {
         this.apickli = new apickli.Apickli('https', URL);
         init(this.apickli);
         callback();
     });
 
-	this.When(/^I reset context$/, function(callback) {
-		this.apickli = new apickli.Apickli('https', URL);
-		init(this.apickli);
-		callback();
-	});
+    Given(/^I set form data to$/, function(formParameters, callback) {
+        this.apickli.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        var content = formParameters.hashes().map(function(d) {
+            return d.name + "=" + d.value;
+        }).join("&");
+        this.apickli.setRequestBody(content);
+        callback();
+    });
 
-	this.Given(/^I set form data to$/, function(formParameters, callback) {
-		this.apickli.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		var content = formParameters.hashes().map(function(d) {
-			return d.name + "=" + d.value;
-		}).join("&");
-		this.apickli.setRequestBody(content);
-		callback();
-	});
+    Given(/^I set request to JSON data$/, function(properties, callback) {
+        this.apickli.addRequestHeader("Content-Type", "application/json");
+        this.apickli.setRequestBody(asJSON(properties));
+        callback();
+    });
 
-	this.Given(/^I set request to JSON data$/, function(properties, callback) {
-		this.apickli.addRequestHeader("Content-Type", "application/json");
-		this.apickli.setRequestBody(asJSON(properties));
-		callback();
-	});
+    Given(/^I set variable (.*) to JSON of$/, function(param, properties, callback) {
+        var jsonValue = asJSON(properties);
+        var nestableJSONValue = jsonValue.replace(/"/g, '\\"');
+        this.apickli.storeValueInScenarioScope(param, nestableJSONValue);
+        callback();
+    });
 
-	this.Given(/^I set variable (.*) to JSON of$/, function(param, properties, callback) {
-		var jsonValue = asJSON(properties);
-		var nestableJSONValue = jsonValue.replace(/"/g, '\\"');
-		this.apickli.storeValueInScenarioScope(param, nestableJSONValue);
-		callback();
-	});
+    // Given(/^I set query parameter (.*) to (.*)$/, function(param, value, callback) {
+    //     var obj = {};
+    //     obj.parameter = param;
+    //     obj.value = value;
+    //     var arr = [];
+    //     arr.push(obj);
+    //     this.apickli.setQueryParameters(arr);
+    //     callback();
+    // });
+});
 
-	function asJSON(cells) {
-		var obj = cells.hashes().reduce(function(obj, aCell) {
-			obj[aCell.name] = aCell.value;
-			return obj
-		}, {});
-		return JSON.stringify(obj);
-	}
-
-};
+defineSupportCode(function({setDefaultTimeout}) {
+    setDefaultTimeout(10 * 1000); // this is in ms
+});

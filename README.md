@@ -28,41 +28,42 @@ ENV="env name"
 
 To deploy both generate and validate proxies. (Make sure `deploy.sh` file has execution privileges.)
 
-```
+```bash
 $ ./deploy.sh all
 ```
 
 To deploy generate proxy
 
-```
+```bash
 $ ./deploy.sh generate
 ```
 
 To deploy validate proxy
 
-```
+```bash
 $ ./deploy.sh validate
 ```
 
 To compile and run generate java callout
 
-```
+```bash
 $ cd jwt-generate-callout
 $ gradle build
 ```
 
 To run tests on validate java callout
 
-```
+```bash
 $ cd jwt-validate-callout
 $ gradle test
 ```
 
-To run BDD tests, first update org and env name in URL variable of file `edge-jwt-sample/test/features/step_definitions/jwt-steps.js`. Then
+To run BDD tests, first update org and env name in URL variable of file `edge-jwt-sample/test/features/support/init.js`. Then
 
-```
+```bash
 $ cd test
-$ grunt
+$ npm install
+$ $ ./node_modules/.bin/cucumberjs
 ```
 
 ## Usage
@@ -329,7 +330,7 @@ Convert private key to PKCS#8 format.
 $ openssl pkcs8 -in privatekey.pem -topk8 -nocrypt -out privatekey-pkcs8.pem
 ```
 
-Note: Above command uses `nocrypt` option. While this is fine for development purpose, it is recommended to use encryption for products keys.
+Note: Above command uses `nocrypt` option. While this is fine for development purpose, it is recommended to use encryption for production keys.
 
 ## Attribution
 The initial part of this project started from this [earlier](https://github.com/apigee/iloveapis2015-jwt-jwe-jws) JWT implementation for edge.

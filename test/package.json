@@ -4,7 +4,6 @@
   "description": "Functional tests for Hello API",
   "dependencies": {
 		"apickli": "latest",
-		"grunt": "latest",
-		"grunt-cucumber": "latest"
+		"cucumber": "latest"
   }
 }
